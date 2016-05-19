@@ -28,22 +28,15 @@ test('Streamed data, chunked up attribute value with entity', function(t) {
             '<html>\n' +
             '  <head>\n' +
             '  <body>\n' +
-            '    <p>\n' +
-            '      "This is a test of the "\n' +
-            '      <em>\n' +
-            '        <a>\n' +
-            '          href="htt&p://foo.bar/baz/quux.html"\n' +
-            '          "emergency"\n' +
-            '      " broadcast system"\n'
+            '    <a>\n' +
+            '      href="htt&p://foo.bar/baz/quux.html"\n'
         );
         t.end()
     })
     p.parse(em);
     [
-        '<p>This is a',
-        ' test of the <em><a href="htt&amp;',
-        'p://foo.bar/baz/quux.html">emergency</a>',
-        '</em> broadcast system'
+        '<a href="htt&amp;',
+        'p://foo.bar/baz/quux.html"></a>'
     ].forEach(function (chunk) {
         em.emit('data', chunk);
     });
