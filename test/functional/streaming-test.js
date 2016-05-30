@@ -43,3 +43,33 @@ test('Streamed data, chunked up attribute value with entity', function(t) {
 
     em.emit('end');
 })
+
+test('Streamed data, regression test for doubled entity in double quoted attribute', function(t) {
+    t.plan(1)
+    var em = new events.EventEmitter();
+    var p = new HTML5.Parser();
+    p.on('end', function() {
+        t.equal(
+            serialize(p.document),
+            '<html>\n' +
+            '  <head>\n' +
+            '  <body>\n' +
+            '    <img>\n' +
+            '      src="foo&bar"\n'
+        );
+        t.end()
+    })
+    p.parse(em);
+    [
+		'<im',
+		'g sr',
+		'c="fo',
+		'o&amp',
+		';b',
+		'ar">'
+    ].forEach(function (chunk) {
+        em.emit('data', chunk);
+    });
+
+    em.emit('end');
+})
